@@ -22,12 +22,22 @@ fun main(args: Array<String>) {
             val positions = input.split(",")
             x = positions[0].trim().toInt()
             y = positions[1].trim().toInt()
+            var skipRound = false
 
             if(board[x-1][y-1] != "") {
                 println("That position is already taken, try again")
+                skipRound = true
             } else {
                 board[x-1][y-1] = "x"
                 printBoard()
+
+                if(!skipRound) {
+                    val playerWon = checkWinner(true)
+                    if(playerWon) {
+                        println("Congratulations, You won!")
+                        continueGame = false
+                    }
+                }
             }
         } catch (e: Exception) {
             println("Invalid input, please try again")
@@ -48,4 +58,33 @@ fun printBoard(){
         println("|")
         println("---------------")
     }
+}
+
+fun checkWinner(player: Boolean): Boolean {
+    var won = false
+    val checkSymbol = if(player) "x" else "o"
+    for(i in 0..2) {
+        //Horizontal wins
+        if(board[i][0] == checkSymbol && board[i][1] == checkSymbol && board[i][2] == checkSymbol) {
+            won = true
+            break
+        }
+
+        //Vertical wins
+        if(board[0][i] == checkSymbol && board[1][i] == checkSymbol && board[2][i] == checkSymbol) {
+            won = true
+            break
+        }
+    }
+
+    //Diagonal wins
+
+    if(board[0][0] == checkSymbol && board[1][1] == checkSymbol && board[2][2] == checkSymbol) {
+        won = true
+    }
+    if(board[2][0] == checkSymbol && board[1][1] == checkSymbol && board[0][2] == checkSymbol) {
+        won = true
+    }
+
+    return won
 }
