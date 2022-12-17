@@ -28,8 +28,9 @@ fun main(args: Array<String>) {
                 println("That position is already taken, try again")
                 skipRound = true
             } else {
-                board[x-1][y-1] = "x"
+                board[x - 1][y - 1] = "x"
                 printBoard()
+            }
 
                 if(!skipRound) {
                     val playerWon = checkWinner(true)
@@ -37,8 +38,13 @@ fun main(args: Array<String>) {
                         println("Congratulations, You won!")
                         continueGame = false
                     }
+
+                    var boardFull = checkBoardFull()
+                    if(!playerWon && boardFull){
+                        println("It's a tie!")
+                        continueGame = false
+                    }
                 }
-            }
         } catch (e: Exception) {
             println("Invalid input, please try again")
         }
@@ -87,4 +93,17 @@ fun checkWinner(player: Boolean): Boolean {
     }
 
     return won
+}
+
+fun checkBoardFull(): Boolean {
+    var boardFull = true
+    for(i in 0..2) {
+        for(j in 0..2) {
+            if(board[i][j] == "") {
+                boardFull = false
+                break
+            }
+        }
+    }
+    return boardFull
 }
